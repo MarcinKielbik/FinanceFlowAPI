@@ -7,5 +7,6 @@ namespace FinanceFlowAPI.Controllers
     [ApiController]
     public class BudgetController : ControllerBase
     {
+
     }
 }
