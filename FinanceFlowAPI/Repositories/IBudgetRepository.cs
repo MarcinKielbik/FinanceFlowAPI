@@ -1,6 +1,6 @@
 using FinanceFlowAPI.Models;
 
-namespace FinanceFlowAPI.Services
+namespace FinanceFlowAPI.Repositories
 {
     public interface IBudgetRepository
     {
