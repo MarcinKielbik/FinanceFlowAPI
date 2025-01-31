@@ -4,6 +4,7 @@ namespace FinanceFlowAPI.Repositories
 {
     public class BudgetRepository : IBudgetRepository
     {
+        public readonly 
         public Task AddAsync(Budget budget)
         {
             throw new NotImplementedException();
