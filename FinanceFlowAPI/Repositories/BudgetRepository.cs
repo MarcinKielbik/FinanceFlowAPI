@@ -1,28 +1,40 @@
+using FinanceFlowAPI.Data;
 using FinanceFlowAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceFlowAPI.Repositories
 {
     public class BudgetRepository : IBudgetRepository
     {
-        public readonly 
-        public Task AddAsync(Budget budget)
+        private readonly AppDbContext _budgetContext;
+
+        public BudgetRepository(AppDbContext budgetContext)
         {
-            throw new NotImplementedException();
+            _budgetContext = budgetContext;
         }
 
-        public Task DeleteAsync(Budget budget)
+        public async Task<Budget> GetBudgetForUserAsync(int userId)
         {
-            throw new NotImplementedException();
+            return await _budgetContext.Budgets.FirstOrDefaultAsync(b => b.UserId == userId);
         }
 
-        public Task<Budget> GetBudgetForUserAsync(int userId)
+        public async Task AddAsync(Budget budget)
         {
-            throw new NotImplementedException();
+            await _budgetContext.Budgets.AddAsync(budget);
+            await _budgetContext.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Budget budget)
+        public async Task UpdateAsync(Budget budget)
         {
-            throw new NotImplementedException();
+            _budgetContext.Update(budget);
+            await _budgetContext.SaveChangesAsync();
+        }
+
+
+        public async Task DeleteAsync(Budget budget)
+        {
+            _budgetContext.Remove(budget);
+            await _budgetContext.SaveChangesAsync();
         }
     }
 }
