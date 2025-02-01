@@ -1,5 +1,6 @@
 using FinanceFlowAPI.Data;
 using FinanceFlowAPI.Repositories;
+using FinanceFlowAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<IBudgetRepository, BudgetRepository>();
+builder.Services.AddScoped<IBudgetService, BudgetService>();
 
 
 var app = builder.Build();
