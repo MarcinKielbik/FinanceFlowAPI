@@ -63,6 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapIdentityApi<ApplicationUser>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();  
