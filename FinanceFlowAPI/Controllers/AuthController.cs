@@ -17,10 +17,11 @@ namespace FinanceFlowAPI.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -45,7 +46,7 @@ namespace FinanceFlowAPI.Controllers
             return Ok(new { message = "User registered successfully" });
         }
         
-        
+        /*
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -62,12 +63,42 @@ namespace FinanceFlowAPI.Controllers
 
             var token = GenerateJwtToken(user);
             return Ok(new { token });
+        }*/
+        
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return Unauthorized("Invalid email or password");
+
+            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+
+            if (!passwordValid)
+                return Unauthorized("Invalid email or password");
+
+            var token = GenerateJwtToken(user);
+
+            if (string.IsNullOrEmpty(token))
+                return StatusCode(500, "Token generation failed");
+
+            return Ok(new { Token = token });
         }
+
+        
+        
         
         private string GenerateJwtToken(ApplicationUser user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user), "User cannot be null when generating JWT token");
+
+            
+            Console.WriteLine($"Generating token for user: {user.Email}");
 
             var claims = new List<Claim>
             {
